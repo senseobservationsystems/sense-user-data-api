@@ -3,6 +3,7 @@ package nl.sense_os.userdataapi;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import okhttp3.Request;
 
 /**
  * Created by tatsuya on 17/03/16.
@@ -33,7 +34,7 @@ public class SenseUserDataAPI {
      * TODO: update it when the underlying function's documentation is finalized.
      * @return
      */
-    public JSONArray getUsersData(){
+    public JSONArray getUsersData() throws HttpResponseException {
         return getUsersData(null, null, null);
     }
 
@@ -52,8 +53,11 @@ public class SenseUserDataAPI {
      *          ]
      * TODO: add exceptions
      */
-    public JSONArray getUsersData(JSONArray userIds, Integer page, Integer per_page){
+    public JSONArray getUsersData(JSONArray userIds, Integer page, Integer per_page) throws HttpResponseException {
         //TODO: to be implemented
+        Request request = new Request.Builder()
+                .url("http://publicobject.com/helloworld.txt")
+                .build();
         return new JSONArray();
     }
 
@@ -70,7 +74,7 @@ public class SenseUserDataAPI {
      *                 ]
      * TODO: add exceptions
      */
-    public void putUsersData(JSONArray userData){
+    public void putUsersData(JSONArray userData) throws HttpResponseException {
         //TODO: to be implemented
     }
 
@@ -78,7 +82,7 @@ public class SenseUserDataAPI {
      * TODO: update it when the underlying function's documentation is finalized.
      * @return
      */
-    public JSONObject getUserData(int userId){
+    public JSONObject getUserData(int userId) throws HttpResponseException {
         return getUserData(userId, null);
     }
 
@@ -90,7 +94,7 @@ public class SenseUserDataAPI {
      * @return JSONObject containing `UserData` of a user by userId. If query was given, the retuned object contains only the fields selected by the query.
      * TODO: add exceptions
      */
-    public JSONObject getUserData(int userId, JSONArray query){
+    public JSONObject getUserData(int userId, JSONArray query) throws HttpResponseException {
         //TODO: to be implemented
         return new JSONObject();
     }
@@ -105,7 +109,7 @@ public class SenseUserDataAPI {
      *                    { first_name: string, last_name: string }
      * TODO: add exceptions
      */
-    public void putUserData(int userId, JSONArray userData){
+    public void putUserData(int userId, JSONArray userData) throws HttpResponseException {
         //TODO: to be implemented
     }
 
@@ -115,7 +119,7 @@ public class SenseUserDataAPI {
      * @param userId int for the user ID of the user whose data should be deleted.
      * TODO: add exceptions
      */
-    public void deleteUserData(int userId){
+    public void deleteUserData(int userId) throws HttpResponseException {
         //TODO: to be implemented
     }
 }
