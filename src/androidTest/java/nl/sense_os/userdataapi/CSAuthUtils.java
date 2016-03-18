@@ -24,7 +24,6 @@ public class CSAuthUtils {
     public static final String  TAG = "CSAuthUtils";
 
     private static String URL_BASE;				  //The base url to use, will differ based on whether to use live or staging server
-    private static String URL_AUTH;				  //The base url to use for authentication, will differ based on whether to use live or staging server
 
     public static final String BASE_URL_LIVE                   = "https://api.sense-os.nl";
     public static final String BASE_URL_STAGING                = "http://api.staging.sense-os.nl";
@@ -56,12 +55,8 @@ public class CSAuthUtils {
         final String url = URL_BASE + "/" + URL_LOGIN;
         // Construct body
         final JSONObject postBody = new JSONObject();
-        try {
-            postBody.put("username", username);
-            postBody.put("password", password);
-        }catch(JSONException JS){
-            throw new RuntimeException("loginUser failed to create the content for the request");
-        }
+        postBody.put("username", username);
+        postBody.put("password", password);
 
         // Construct request
         Request request = new Request.Builder()
@@ -97,14 +92,10 @@ public class CSAuthUtils {
         String email = "spam+"+now+"@sense-os.nl";
         String userid = "";
 
-        try{
-            user.put("username", username);
-            user.put("email", email);
-            user.put("password", password);
-            postBody.put("user", user);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        user.put("username", username);
+        user.put("email", email);
+        user.put("password", password);
+        postBody.put("user", user);
 
         // Construct request
         Request request = new Request.Builder()

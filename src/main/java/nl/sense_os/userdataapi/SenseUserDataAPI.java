@@ -3,16 +3,48 @@ package nl.sense_os.userdataapi;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by tatsuya on 17/03/16.
  */
 public class SenseUserDataAPI {
 
-    private String mBaseUrl = null;
-    private String mAppKey = null;
+    public static final String  TAG = "SenseUserDataAPI";
+
+    private static String SCHEME_BASE;				  //The base scheme to use, will differ based on whether to use live or staging server
+    private static String URL_BASE;				  //The base url to use, will differ based on whether to use live or staging server
+    public static final String SCHEME_LIVE                   = "https";
+    public static final String SCHEME_STAGING                = "http";
+    public static final String BASE_URL_LIVE                   = "user-data-api.sense-os.nl";
+    public static final String BASE_URL_STAGING                = "user-data-api.staging.sense-os.nl";
+    public static final String URL_USERDATA               = "user_data";
     private String mSessionId = null;
+
+    public static final String QUERY_USERS_ID               = "users_id";
+
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+
+    private final OkHttpClient client = new OkHttpClient();
+
+    public SenseUserDataAPI(boolean useLiveServer)
+    {
+        if(useLiveServer) {
+            SCHEME_BASE = SCHEME_LIVE;
+            URL_BASE = BASE_URL_LIVE;
+        } else {
+            SCHEME_BASE = SCHEME_STAGING;
+            URL_BASE = BASE_URL_STAGING;
+        }
+    }
 
     /**
      * Get the currently set session id
@@ -31,18 +63,7 @@ public class SenseUserDataAPI {
     }
 
     /**
-     * TODO: update it when the underlying function's documentation is finalized.
-     * @return
-     */
-    public JSONArray getUsersData() throws HttpResponseException {
-        return getUsersData(null, null, null);
-    }
-
-    /**
      * Get multiple `User Data` in one domain. This can be used only by domain manager.
-     * @param userIds    JSONArray containing int for userId of the user whose data should be returned. Optional.
-     * @param page      Integer for page?? Optional.
-     * @param per_page  integer for the number of users that a page should contain?? Optional.
      * @return JSONArray containing usersData, structured as:
      *          [
      *                    {
@@ -53,36 +74,52 @@ public class SenseUserDataAPI {
      *          ]
      * TODO: add exceptions
      */
-    public JSONArray getUsersData(JSONArray userIds, Integer page, Integer per_page) throws HttpResponseException {
-        //TODO: to be implemented
-        Request request = new Request.Builder()
-                .url("http://publicobject.com/helloworld.txt")
-                .build();
-        return new JSONArray();
+    public JSONArray getUsersData() throws HttpResponseException, JSONException, IOException {
+        return getUsersData(new JSONArray());
     }
 
     /**
-     * Put multiple `UserData`. This can be used only by domain manager.
-     *
-     * @param userData JSONArray containing `UserData`, structured as:
-     *                 [
+     * Get multiple `User Data` in one domain. This can be used only by domain manager.
+     * @param userIds    JSONArray containing int for userId of the user whose data should be returned. Optional.
+     * @return JSONArray containing usersData, structured as:
+     *          [
      *                    {
      *                      user_id: integer,
      *                      user_data: { first_name: string, last_name: string }
      *                    },
      *                    ...
-     *                 ]
+     *          ]
      * TODO: add exceptions
      */
-    public void putUsersData(JSONArray userData) throws HttpResponseException {
-        //TODO: to be implemented
+    public JSONArray getUsersData(JSONArray userIds) throws HttpResponseException, JSONException, IOException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(SCHEME_STAGING)
+                .host(URL_BASE)
+                .addPathSegment(URL_USERDATA)
+                .addQueryParameter("users_id", userIds.toString())
+                .build();
+
+        // Construct request
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("SESSION-ID", mSessionId)
+                .build();
+
+        // Send Request
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+        // Handle response
+        JSONArray responseJSON = null;
+        responseJSON = new JSONArray(response.body().string());
+        return responseJSON;
     }
 
     /**
      * TODO: update it when the underlying function's documentation is finalized.
      * @return
      */
-    public JSONObject getUserData(int userId) throws HttpResponseException {
+    public JSONObject getUserData(int userId) throws HttpResponseException, IOException, JSONException {
         return getUserData(userId, null);
     }
 
@@ -94,9 +131,25 @@ public class SenseUserDataAPI {
      * @return JSONObject containing `UserData` of a user by userId. If query was given, the retuned object contains only the fields selected by the query.
      * TODO: add exceptions
      */
-    public JSONObject getUserData(int userId, JSONArray query) throws HttpResponseException {
-        //TODO: to be implemented
-        return new JSONObject();
+    public JSONObject getUserData(int userId, JSONArray query) throws HttpResponseException, IOException, JSONException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(SCHEME_STAGING)
+                .host(URL_BASE)
+                .addPathSegment(URL_USERDATA)
+                .addPathSegment(Integer.toString(userId))
+                .build();
+
+        // Construct request
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("SESSION-ID", mSessionId)
+                .build();
+
+        // Send Request
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+        return new JSONObject(response.body().string());
     }
 
 
@@ -109,8 +162,24 @@ public class SenseUserDataAPI {
      *                    { first_name: string, last_name: string }
      * TODO: add exceptions
      */
-    public void putUserData(int userId, JSONArray userData) throws HttpResponseException {
-        //TODO: to be implemented
+    public void putUserData(int userId, JSONObject userData) throws HttpResponseException, IOException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(SCHEME_STAGING)
+                .host(URL_BASE)
+                .addPathSegment(URL_USERDATA)
+                .addPathSegment(Integer.toString(userId))
+                .build();
+
+        // Construct request
+        Request request = new Request.Builder()
+                .url(url)
+                .put(RequestBody.create(JSON, userData.toString()))
+                .addHeader("SESSION-ID", mSessionId)
+                .build();
+
+        // Send Request
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
     }
 
     /**
