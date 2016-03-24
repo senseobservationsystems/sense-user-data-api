@@ -1,5 +1,7 @@
 package nl.sense_os.userdataapi;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +108,7 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
+        Log.e(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
@@ -146,6 +149,7 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
+        Log.e(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
@@ -178,6 +182,7 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
+        Log.d(TAG, String.format("[SenseUserDataAPI] Sending PUT Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
     }
@@ -188,7 +193,24 @@ public class SenseUserDataAPI {
      * @param userId int for the user ID of the user whose data should be deleted.
      * TODO: add exceptions
      */
-    public void deleteUserData(int userId) throws HttpResponseException {
-        //TODO: to be implemented
+    public void deleteUserData(int userId) throws HttpResponseException, IOException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(SCHEME_STAGING)
+                .host(URL_BASE)
+                .addPathSegment(URL_USERDATA)
+                .addPathSegment(Integer.toString(userId))
+                .build();
+
+        // Construct request
+        Request request = new Request.Builder()
+                .url(url)
+                .delete()
+                .addHeader("SESSION-ID", mSessionId)
+                .build();
+
+        // Send Request
+        Log.e(TAG, String.format("[SenseUserDataAPI] Sending DELETE Request to %s", url.toString()));
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
     }
 }

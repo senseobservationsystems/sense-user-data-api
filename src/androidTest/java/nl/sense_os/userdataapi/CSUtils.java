@@ -18,19 +18,20 @@ import okhttp3.Response;
 /**
  * Created by tatsuya on 17/03/16.
  */
-public class CSAuthUtils {
+public class CSUtils {
 
     public static final String APP_KEY = "wRgE7HZvhDsRKaRm6YwC3ESpIqqtakeg";
-    public static final String  TAG = "CSAuthUtils";
+    public static final String  TAG = "CSUtils";
 
     private static String URL_BASE;				  //The base url to use, will differ based on whether to use live or staging server
 
     public static final String BASE_URL_LIVE                   = "https://api.sense-os.nl";
     public static final String BASE_URL_STAGING                = "http://api.staging.sense-os.nl";
 
-    public static final String URL_REGISTRATION                = "users";
+    public static final String URL_USERS                       = "users";
     public static final String URL_LOGIN                       = "login";
     public static final String URL_LOGOUT                      = "logout";
+    public static final String URL_CURRENT                       = "current";
 
     public static final String RESPONSE_CODE = "http response code";
 
@@ -38,7 +39,7 @@ public class CSAuthUtils {
 
     private final OkHttpClient client = new OkHttpClient();
 
-    public CSAuthUtils (boolean useLiveServer)
+    public CSUtils(boolean useLiveServer)
     {
         if(useLiveServer) {
             URL_BASE = BASE_URL_LIVE;
@@ -81,7 +82,7 @@ public class CSAuthUtils {
     public JSONObject createCSAccount(String password) throws IOException, JSONException {
 
         String urlString = "http://api.staging.sense-os.nl/users.json";
-        final String url = URL_BASE + "/" + URL_REGISTRATION;
+        final String url = URL_BASE + "/" + URL_USERS;
 
         // Construct Body
         JSONObject user = new JSONObject();
@@ -113,7 +114,27 @@ public class CSAuthUtils {
         responseJSON = new JSONObject(response.body().string());
 
         return responseJSON;
+    }
 
+    public int getUserId(String sessionId) throws JSONException, IOException {
+
+        final String url = URL_BASE + "/" + URL_USERS + "/" + URL_CURRENT;
+
+        // Construct request
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("SESSION-ID", sessionId)
+                .build();
+
+        // Send Request
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+        // Handle response
+        JSONObject responseJSON = null;
+        responseJSON = new JSONObject(response.body().string());
+        String userIdString = responseJSON.getJSONObject("user").getString("id");
+        return Integer.parseInt(userIdString);
     }
 
     public boolean deleteAccount(String userName, String password, String userId) throws JSONException, IOException {
