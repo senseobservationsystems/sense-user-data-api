@@ -1,7 +1,8 @@
-package nl.sense_os.statisticsapi;
+package nl.sense_os.userdataapi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -15,15 +16,15 @@ import okhttp3.Response;
 /**
  * Created by tatsuya on 22/03/16.
  */
-public class StatisticsAPI {
+public class SenseStatisticsAPI {
     public static final String  TAG = "SenseUserDataAPI";
 
     private static String SCHEME_BASE;				  //The base scheme to use, will differ based on whether to use live or staging server
     private static String URL_BASE;				  //The base url to use, will differ based on whether to use live or staging server
     public static final String SCHEME_LIVE                   = "https";
     public static final String SCHEME_STAGING                = "http";
-    public static final String BASE_URL_LIVE                   = "stats-api.sense-os.nl";
-    public static final String BASE_URL_STAGING                = "stats-api.staging.sense-os.nl";
+    public static final String BASE_URL_LIVE                   = "statistics-api.sense-os.nl";
+    public static final String BASE_URL_STAGING                = "statistics-api.staging.sense-os.nl";
     public static final String URL_STATS               = "stats";
     private String mSessionId = null;
 
@@ -33,7 +34,7 @@ public class StatisticsAPI {
 
     private final OkHttpClient client = new OkHttpClient();
 
-    public StatisticsAPI(boolean useLiveServer)
+    public SenseStatisticsAPI(boolean useLiveServer)
     {
         if(useLiveServer) {
             SCHEME_BASE = SCHEME_LIVE;
@@ -81,7 +82,7 @@ public class StatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
         JSONArray responseJSON = null;
@@ -113,7 +114,7 @@ public class StatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
         JSONArray responseJSON = null;
@@ -148,11 +149,79 @@ public class StatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
         JSONArray responseJSON = null;
         responseJSON = new JSONArray(response.body().string());
         return responseJSON;
     }
+
+    /**
+     * Get statistics result of the given statistics type.
+     * @param context JSONArray for `context`. The value can be "user", "group" and "domain".
+     * @param contextId integer for the context ID.
+     * @param statisticsType String for statisticsType that should be returned
+     * @return JSONObject
+     *          The value can be "registered_user", "active_user", "time_active", "sleep_time" and "etc".
+     *
+     * TODO: add exceptions
+     * TODO: Make the parameter context enum
+     */
+    public JSONObject getStatistics(String context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme(SCHEME_STAGING)
+                .host(URL_BASE)
+                .addPathSegment(URL_STATS)
+                .addPathSegment(context)
+                .addPathSegment(Integer.toString(contextId))
+                .addPathSegment(statisticsType)
+                .build();
+
+        if (query != null){
+            url = addQueryParameters(url, query);
+        }
+
+        // Construct request
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("SESSION-ID", mSessionId)
+                .build();
+
+        // Send Request
+        Response response = client.newCall(request).execute();
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+
+        // Handle response
+        JSONObject responseJSON = null;
+        responseJSON = new JSONObject(response.body().string());
+        return responseJSON;
+    }
+
+    private HttpUrl addQueryParameters(HttpUrl url, SenseStatisticsQuery query){
+        if (query.getStartTime() != null) {
+            url.newBuilder().addQueryParameter("start_time", Long.toString(query.getStartTime())).build();
+        }
+        if (query.getEndTime() != null) {
+            url.newBuilder().addQueryParameter("end_time", Long.toString(query.getEndTime())).build();
+        }
+        if (query.getSortOrder() != null) {
+            url.newBuilder().addQueryParameter("sort", query.getSortOrder()).build();
+        }
+        if (query.getLimit() != null) {
+            url.newBuilder().addQueryParameter("limit", Integer.toString(query.getLimit())).build();
+        }
+        if (query.getPeriod() != null) {
+            url.newBuilder().addQueryParameter("period", query.getPeriod()).build();
+        }
+        if (query.getAggregation() != null) {
+            url.newBuilder().addQueryParameter("aggregation", query.getAggregation()).build();
+        }
+        if (query.getRunning() != null) {
+            url.newBuilder().addQueryParameter("aggregation", Boolean.toString(query.getRunning())).build();
+        }
+        return url;
+    }
 }
+
+
