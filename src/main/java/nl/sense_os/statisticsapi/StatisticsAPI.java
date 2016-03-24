@@ -5,7 +5,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-import nl.sense_os.userdataapi.HttpResponseException;
+import nl.sense_os.userdataapi.SenseResponseException;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -66,7 +66,7 @@ public class StatisticsAPI {
      *
      * TODO: add exceptions
      */
-    public JSONArray getContext() throws HttpResponseException, JSONException, IOException {
+    public JSONArray getContext() throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -97,7 +97,7 @@ public class StatisticsAPI {
      * TODO: add exceptions
      * TODO: Make the parameter context enum
      */
-    public JSONArray getContextIds(String context) throws HttpResponseException, JSONException, IOException {
+    public JSONArray getContextIds(String context) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -131,7 +131,7 @@ public class StatisticsAPI {
      * TODO: add exceptions
      * TODO: Make the parameter context enum
      */
-    public JSONArray getActiveStatisticsType(String context, int contextId) throws HttpResponseException, JSONException, IOException {
+    public JSONArray getActiveStatisticsType(String context, int contextId) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)

@@ -44,6 +44,7 @@ public class SenseUserDataAPITest {
 
             // Act: call get for a single user using the user Id
             JSONObject userData = userDataAPI.getUserData(userId);
+
             // Assert: the user_data to be empty
             JSONAssert.assertEquals(userData.getJSONObject("user_data"), new JSONObject(), false);
 
@@ -51,7 +52,7 @@ public class SenseUserDataAPITest {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (HttpResponseException e) {
+        } catch (SenseResponseException e) {
             e.printStackTrace();
         }
     }
@@ -76,7 +77,7 @@ public class SenseUserDataAPITest {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (HttpResponseException e) {
+        } catch (SenseResponseException e) {
             e.printStackTrace();
         }
     }
@@ -107,12 +108,11 @@ public class SenseUserDataAPITest {
             JSONObject userData = userDataAPI.getUserData(userId);
             JSONAssert.assertEquals(userData.getJSONObject("user_data"), innerUserData, false);
 
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (HttpResponseException e) {
+        } catch (SenseResponseException e) {
             e.printStackTrace();
         }
     }
@@ -156,7 +156,7 @@ public class SenseUserDataAPITest {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (HttpResponseException e) {
+        } catch (SenseResponseException e) {
             e.printStackTrace();
         }
     }
@@ -186,7 +186,7 @@ public class SenseUserDataAPITest {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (HttpResponseException e) {
+        } catch (SenseResponseException e) {
             e.printStackTrace();
         }
     }
@@ -210,7 +210,7 @@ public class SenseUserDataAPITest {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (HttpResponseException e) {
+        } catch (SenseResponseException e) {
             e.printStackTrace();
         }
     }

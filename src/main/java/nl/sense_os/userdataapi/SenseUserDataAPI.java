@@ -74,9 +74,11 @@ public class SenseUserDataAPI {
      *                    },
      *                    ...
      *          ]
-     * TODO: add exceptions
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
-    public JSONArray getUsersData() throws HttpResponseException, JSONException, IOException {
+    public JSONArray getUsersData() throws SenseResponseException, JSONException, IOException {
         return getUsersData(new JSONArray());
     }
 
@@ -91,9 +93,11 @@ public class SenseUserDataAPI {
      *                    },
      *                    ...
      *          ]
-     * TODO: add exceptions
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
-    public JSONArray getUsersData(JSONArray userIds) throws HttpResponseException, JSONException, IOException {
+    public JSONArray getUsersData(JSONArray userIds) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -108,9 +112,9 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
-        Log.e(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
+        Log.d(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
         JSONArray responseJSON = null;
@@ -119,10 +123,15 @@ public class SenseUserDataAPI {
     }
 
     /**
-     * TODO: update it when the underlying function's documentation is finalized.
-     * @return
+     * Get `UserData` of a user by userId.
+     *
+     * @param userId int for the user ID of the user whose data should be returned.
+     * @return JSONObject containing `UserData` of a user by userId.
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
-    public JSONObject getUserData(int userId) throws HttpResponseException, IOException, JSONException {
+    public JSONObject getUserData(int userId) throws SenseResponseException, IOException, JSONException {
         return getUserData(userId, null);
     }
 
@@ -132,9 +141,11 @@ public class SenseUserDataAPI {
      * @param userId int for the user ID of the user whose data should be returned.
      * @param query JSONArray containing string for the fields that should be returned. If not given, all fields will be included in the returned `UserData`. Optional.
      * @return JSONObject containing `UserData` of a user by userId. If query was given, the retuned object contains only the fields selected by the query.
-     * TODO: add exceptions
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
-    public JSONObject getUserData(int userId, JSONArray query) throws HttpResponseException, IOException, JSONException {
+    public JSONObject getUserData(int userId, JSONArray query) throws SenseResponseException, IOException, JSONException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -149,14 +160,12 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
-        Log.e(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
+        Log.d(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         return new JSONObject(response.body().string());
     }
-
-
 
     /**
      * Put `UserData` of a user specified by the userId.
@@ -164,9 +173,10 @@ public class SenseUserDataAPI {
      * @param userId int for the user ID of the user whose data should be updated.
      * @param userData JSONArray containing userData, structured as:
      *                    { first_name: string, last_name: string }
-     * TODO: add exceptions
+     * @exception SenseResponseException
+     * @exception IOException
      */
-    public void putUserData(int userId, JSONObject userData) throws HttpResponseException, IOException {
+    public void putUserData(int userId, JSONObject userData) throws SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -184,16 +194,17 @@ public class SenseUserDataAPI {
         // Send Request
         Log.d(TAG, String.format("[SenseUserDataAPI] Sending PUT Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
     }
 
     /**
      * Delete `UserData` of a user specified by the userId.
      *
      * @param userId int for the user ID of the user whose data should be deleted.
-     * TODO: add exceptions
+     * @exception SenseResponseException
+     * @exception IOException
      */
-    public void deleteUserData(int userId) throws HttpResponseException, IOException {
+    public void deleteUserData(int userId) throws SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -209,8 +220,7 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
-        Log.e(TAG, String.format("[SenseUserDataAPI] Sending DELETE Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
     }
 }
