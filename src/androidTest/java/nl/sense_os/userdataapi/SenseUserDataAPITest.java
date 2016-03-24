@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -24,7 +25,11 @@ public class SenseUserDataAPITest {
 
     public static final boolean  useLive = false;
 
-    //TODO: add setup and tearDown
+    @Before
+    public void setup() {
+        Log.v(TAG, "Setup SenseUserDataAPITest");
+    }
+
     @After
     public void tearDown() throws Exception {
         Log.v(TAG, "Tearing Down SenseUserDataAPITest");
