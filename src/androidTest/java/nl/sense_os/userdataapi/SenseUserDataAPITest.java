@@ -33,7 +33,7 @@ public class SenseUserDataAPITest {
     @After
     public void tearDown() throws Exception {
         Log.v(TAG, "Tearing Down SenseUserDataAPITest");
-        clearUsersData();
+        //clearUsersData();
     }
 
     @Test
