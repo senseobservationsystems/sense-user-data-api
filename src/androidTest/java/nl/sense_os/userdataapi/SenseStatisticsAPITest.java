@@ -164,10 +164,10 @@ public class SenseStatisticsAPITest {
             SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
             statisticsAPI.setSessionId(sessionId);
             //prepare query
-            SenseStatisticsQuery query = new SenseStatisticsQuery();
-            query.setStartTime(0l);
-            query.setEndTime(System.currentTimeMillis());
-            query.setLimit(100);
+            SenseStatisticsQuery query = new SenseStatisticsQuery()
+                    .setStartTime(0l)
+                    .setEndTime(System.currentTimeMillis())
+                    .setLimit(100);
 
             // Act: get statistics
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);

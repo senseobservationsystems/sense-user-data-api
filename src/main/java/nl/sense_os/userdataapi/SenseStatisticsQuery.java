@@ -17,55 +17,62 @@ public class SenseStatisticsQuery {
         return startTime;
     }
 
-    public void setStartTime(Long startTime) {
+    public SenseStatisticsQuery setStartTime(Long startTime) {
         this.startTime = startTime;
+        return this;
     }
 
     public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Long endTime) {
+    public SenseStatisticsQuery setEndTime(Long endTime) {
         this.endTime = endTime;
+        return this;
     }
 
     public String getSortOrder() {
         return sortOrder;
     }
 
-    public void setSortOrder(String sortOrder) {
+    public SenseStatisticsQuery setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
+        return this;
     }
 
     public Integer getLimit() {
         return limit;
     }
 
-    public void setLimit(Integer limit) {
+    public SenseStatisticsQuery setLimit(Integer limit) {
         this.limit = limit;
+        return this;
     }
 
     public String getPeriod() {
         return period;
     }
 
-    public void setPeriod(String period) {
+    public SenseStatisticsQuery setPeriod(String period) {
         this.period = period;
+        return this;
     }
 
     public String getAggregation() {
         return aggregation;
     }
 
-    public void setAggregation(String aggregation) {
+    public SenseStatisticsQuery setAggregation(String aggregation) {
         this.aggregation = aggregation;
+        return this;
     }
 
     public Boolean getRunning() {
         return running;
     }
 
-    public void setRunning(Boolean running) {
+    public SenseStatisticsQuery setRunning(Boolean running) {
         this.running = running;
+        return this;
     }
 }
