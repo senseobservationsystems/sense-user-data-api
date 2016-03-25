@@ -112,14 +112,11 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
-        Log.d(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
-        JSONArray responseJSON = null;
-        responseJSON = new JSONArray(response.body().string());
-        return responseJSON;
+        return new JSONArray(response.body().string());
     }
 
     /**
@@ -160,7 +157,6 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
-        Log.d(TAG, String.format("[SenseUserDataAPI] Sending GET Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
@@ -192,7 +188,6 @@ public class SenseUserDataAPI {
                 .build();
 
         // Send Request
-        Log.d(TAG, String.format("[SenseUserDataAPI] Sending PUT Request to %s", url.toString()));
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
     }

@@ -64,8 +64,9 @@ public class SenseStatisticsAPI {
     /**
      * Get a list of `context` available for this user.
      * @return JSONArray containing available `context`. enum of String consists of "user", "group", "domain".
-     *
-     * TODO: add exceptions
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
     public JSONArray getContext() throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
@@ -85,18 +86,16 @@ public class SenseStatisticsAPI {
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
-        JSONArray responseJSON = null;
-        responseJSON = new JSONArray(response.body().string());
-        return responseJSON;
+        return new JSONArray(response.body().string());
     }
 
     /**
      * Get a list of `contextId` available for this context and this user.
      * @param context JSONArray for `context`. enum of String consists of "user", "group", "domain".
      * @return JSONArray containing integers for available `contextId`.
-     *
-     * TODO: add exceptions
-     * TODO: Make the parameter context enum
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
     public JSONArray getContextIds(String context) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
@@ -117,9 +116,7 @@ public class SenseStatisticsAPI {
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
-        JSONArray responseJSON = null;
-        responseJSON = new JSONArray(response.body().string());
-        return responseJSON;
+        return new JSONArray(response.body().string());
     }
 
     /**
@@ -128,9 +125,9 @@ public class SenseStatisticsAPI {
      * @param contextId integer for the context ID.
      * @return JSONArray containing String for available `statistics_type`.
      *          The value can be "registered_user", "active_user", "time_active", "sleep_time" and "etc".
-     *
-     * TODO: add exceptions
-     * TODO: Make the parameter context enum
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
     public JSONArray getActiveStatisticsType(String context, int contextId) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
@@ -152,23 +149,55 @@ public class SenseStatisticsAPI {
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
-        JSONArray responseJSON = null;
-        responseJSON = new JSONArray(response.body().string());
-        return responseJSON;
+        return new JSONArray(response.body().string());
     }
 
     /**
      * Get statistics result of the given statistics type.
      * @param context JSONArray for `context`. The value can be "user", "group" and "domain".
-     * @param contextId integer for the context ID.
-     * @param statisticsType String for statisticsType that should be returned
-     * @return JSONObject
-     *          The value can be "registered_user", "active_user", "time_active", "sleep_time" and "etc".
+     * @param contextId int for the context ID.
+     * @param statisticsType String for statisticsType that should be returned.
+     * @return JSONArray structured as:
+     *              [
+     *                  {
+     *                      "time": long,
+     *                      "value": {
+     *                          ??? //TODO: figure this out or add reference.
+     *                      }
+     *                  },
+     *                  ...
+     *              ]
      *
-     * TODO: add exceptions
-     * TODO: Make the parameter context enum
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
      */
-    public JSONObject getStatistics(String context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getStatistics(String context, int contextId, String statisticsType) throws SenseResponseException, JSONException, IOException {
+       return getStatistics(context, contextId, statisticsType, null);
+    }
+
+    /**
+     * Get statistics result of the given statistics type.
+     * @param context JSONArray for `context`. The value can be "user", "group" and "domain".
+     * @param contextId int for the context ID.
+     * @param statisticsType String for statisticsType that should be returned.
+     * @param query SenseStatisticsQuery for specifying desired condition for the query.
+     * @return JSONArray structured as:
+     *              [
+     *                  {
+     *                      "time": long,
+     *                      "value": {
+     *                          ??? //TODO: figure this out or add reference.
+     *                      }
+     *                  },
+     *                  ...
+     *              ]
+     *
+     * @exception SenseResponseException
+     * @exception JSONException
+     * @exception IOException
+     */
+    public JSONArray getStatistics(String context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
@@ -193,9 +222,7 @@ public class SenseStatisticsAPI {
         if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
 
         // Handle response
-        JSONObject responseJSON = null;
-        responseJSON = new JSONObject(response.body().string());
-        return responseJSON;
+        return new JSONArray(response.body().string());
     }
 
     private HttpUrl addQueryParameters(HttpUrl url, SenseStatisticsQuery query){

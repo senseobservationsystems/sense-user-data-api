@@ -48,7 +48,7 @@ public class SenseStatisticsAPITest {
             // Act: get an array of contexts
             JSONArray arrayOfContext = statisticsAPI.getContext();
 
-            // Assert:
+            // Assert: check that the arrayOfContext contains domain, group and user
             JSONArray expectedArray = new JSONArray();
             expectedArray.put(SenseStatisticsContext.DOMAIN);
             expectedArray.put(SenseStatisticsContext.GROUP);
@@ -77,7 +77,7 @@ public class SenseStatisticsAPITest {
             // Act: get an array of context IDs
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
 
-            // Assert: the user_data to be empty
+            // Assert: domain ID should be more than 0.
             Log.d(TAG, "Domain ID:" + arrayOfContextIds.toString());
             Assert.assertTrue(arrayOfContextIds.length() > 0);
 
@@ -107,7 +107,7 @@ public class SenseStatisticsAPITest {
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
             JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
 
-            // Assert: the user_data to be empty
+            // Assert: available statisticsType should be more than 0 for this user
             Log.d(TAG, "Available statisticsType:" + arrayOfStatisticsType.toString());
             Assert.assertTrue(arrayOfStatisticsType.length() > 0);
 
@@ -120,44 +120,73 @@ public class SenseStatisticsAPITest {
         } catch (SenseResponseException e) {
             e.printStackTrace();
             Assert.fail();
-
         }
     }
 
-//    @Test
-//    public void testGetStatistics() {
-//        Log.d(TAG, "testGetStatistics started!");
-//        CSUtils csUtils = new CSUtils(useLive);
-//        try {
-//            // Arrange: login as a user and get the user id
-//            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
-//            SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
-//            statisticsAPI.setSessionId(sessionId);
-//
-//            // Act: get an array of context IDs
-//            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-//            JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
-//            JSONObject statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0));
-//
-//            // Assert: the user_data to be empty
-//            JSONArray expectedArray = new JSONArray();
-////            expectedArray.put("domain");
-////            expectedArray.put("group");
-////            expectedArray.put("user");
-//            Log.d(TAG, arrayOfStatisticsType.toString());
-//            JSONAssert.assertEquals(expectedArray, arrayOfStatisticsType, false);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Assert.fail();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//            Assert.fail();
-//        } catch (SenseResponseException e) {
-//            e.printStackTrace();
-//            Assert.fail();
-//        }
-//    }
+    @Test
+    public void testGetStatistics() {
+        Log.d(TAG, "testGetStatistics started!");
+        CSUtils csUtils = new CSUtils(useLive);
+        try {
+            // Arrange: login as a user and get the user id
+            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
+            statisticsAPI.setSessionId(sessionId);
 
+            // Act: get statistics
+            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
+            JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
+            JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0));
 
+            // Assert: TODO: assert properly 
+            Log.d(TAG, statistics.toString());
+            //JSONAssert.assertEquals(expectedArray, arrayOfStatisticsType, false);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Assert.fail();
+        } catch (SenseResponseException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testGetStatisticsWithQuery() {
+        Log.d(TAG, "testGetStatistics started!");
+        CSUtils csUtils = new CSUtils(useLive);
+        try {
+            // Arrange: login as a user and get the user id
+            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
+            statisticsAPI.setSessionId(sessionId);
+            //prepare query
+            SenseStatisticsQuery query = new SenseStatisticsQuery();
+            query.setStartTime(0l);
+            query.setEndTime(System.currentTimeMillis());
+            query.setLimit(100);
+
+            // Act: get statistics
+            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
+            JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
+            JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0), query);
+
+            // Assert: TODO: assert properly
+            Log.d(TAG, statistics.toString());
+            //JSONAssert.assertEquals(expectedArray, arrayOfStatisticsType, false);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Assert.fail();
+        } catch (SenseResponseException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
 }
