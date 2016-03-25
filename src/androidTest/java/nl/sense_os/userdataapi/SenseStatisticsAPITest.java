@@ -138,7 +138,7 @@ public class SenseStatisticsAPITest {
             JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
             JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0));
 
-            // Assert: TODO: assert properly 
+            // Assert: TODO: assert properly
             Log.d(TAG, statistics.toString());
             //JSONAssert.assertEquals(expectedArray, arrayOfStatisticsType, false);
 

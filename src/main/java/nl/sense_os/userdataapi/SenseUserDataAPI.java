@@ -79,7 +79,7 @@ public class SenseUserDataAPI {
      * @exception IOException
      */
     public JSONArray getUsersData() throws SenseResponseException, JSONException, IOException {
-        return getUsersData(new JSONArray());
+        return getUsersData(null);
     }
 
     /**
@@ -102,8 +102,11 @@ public class SenseUserDataAPI {
                 .scheme(SCHEME_STAGING)
                 .host(URL_BASE)
                 .addPathSegment(URL_USERDATA)
-                .addQueryParameter("users_id", userIds.toString())
                 .build();
+
+        if (userIds != null) {
+            url.newBuilder().addQueryParameter("users_id", userIds.toString()).build();
+        }
 
         // Construct request
         Request request = new Request.Builder()
@@ -113,7 +116,7 @@ public class SenseUserDataAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
 
         // Handle response
         return new JSONArray(response.body().string());
@@ -158,7 +161,7 @@ public class SenseUserDataAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
 
         return new JSONObject(response.body().string());
     }
@@ -189,7 +192,7 @@ public class SenseUserDataAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
     }
 
     /**
@@ -216,6 +219,10 @@ public class SenseUserDataAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
+    }
+
+    private String getExceptionMessage(Response response){
+        return "Unexpected code " + response + " for " + response.request();
     }
 }

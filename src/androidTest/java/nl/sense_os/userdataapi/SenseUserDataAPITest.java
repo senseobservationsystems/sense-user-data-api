@@ -51,14 +51,17 @@ public class SenseUserDataAPITest {
             JSONObject userData = userDataAPI.getUserData(userId);
 
             // Assert: the user_data to be empty
-            JSONAssert.assertEquals(userData.getJSONObject("user_data"), new JSONObject(), false);
+            JSONAssert.assertEquals(new JSONObject(), userData.getJSONObject("user_data"), false);
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (SenseResponseException e) {
             e.printStackTrace();
+            Assert.fail();
         }
     }
 
@@ -80,10 +83,13 @@ public class SenseUserDataAPITest {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (SenseResponseException e) {
             e.printStackTrace();
+            Assert.fail();
         }
     }
 
@@ -115,10 +121,13 @@ public class SenseUserDataAPITest {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (SenseResponseException e) {
             e.printStackTrace();
+            Assert.fail();
         }
     }
 
@@ -154,15 +163,18 @@ public class SenseUserDataAPITest {
             Log.d(TAG, String.format("%s", retrievedUsersData.toString()));
             for (int i = 0; i < updatedUsersData.length(); i++) {
                 JSONObject userData = updatedUsersData.getJSONObject(i);
-                JSONAssert.assertEquals(userData.getJSONObject("user_data"), innerUserData, false);
+                JSONAssert.assertEquals(innerUserData, userData.getJSONObject("user_data"), false);
             }
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (SenseResponseException e) {
             e.printStackTrace();
+            Assert.fail();
         }
     }
 
@@ -185,18 +197,23 @@ public class SenseUserDataAPITest {
             // Assert : make sure retrieved user_data is empty
             JSONObject retrievedUserData = userDataAPI.getUserData(userId);
             Log.d(TAG, String.format("%s", retrievedUserData.toString()));
-            JSONAssert.assertEquals(retrievedUserData.getJSONObject("user_data"), new JSONObject(), false);
+            JSONAssert.assertEquals(new JSONObject(), retrievedUserData.getJSONObject("user_data"), false);
 
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (SenseResponseException e) {
             e.printStackTrace();
+            Assert.fail();
+
         }
     }
 
     private void clearUsersData(){
+        //TODO: this gets internal server error for some reasons. Fix it.
         // delete users data
         CSUtils csUtils = new CSUtils(useLive);
         String sessionId = null;
@@ -213,10 +230,13 @@ public class SenseUserDataAPITest {
             }
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            Assert.fail();
         } catch (SenseResponseException e) {
             e.printStackTrace();
+            Assert.fail();
         }
     }
 }

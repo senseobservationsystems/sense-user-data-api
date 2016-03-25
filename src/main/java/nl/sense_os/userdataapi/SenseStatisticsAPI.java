@@ -83,7 +83,7 @@ public class SenseStatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
 
         // Handle response
         return new JSONArray(response.body().string());
@@ -113,7 +113,7 @@ public class SenseStatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
 
         // Handle response
         return new JSONArray(response.body().string());
@@ -146,7 +146,7 @@ public class SenseStatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
 
         // Handle response
         return new JSONArray(response.body().string());
@@ -219,7 +219,7 @@ public class SenseStatisticsAPI {
 
         // Send Request
         Response response = client.newCall(request).execute();
-        if (!response.isSuccessful()) throw new SenseResponseException("Unexpected code " + response);
+        if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
 
         // Handle response
         return new JSONArray(response.body().string());
@@ -248,6 +248,10 @@ public class SenseStatisticsAPI {
             url.newBuilder().addQueryParameter("aggregation", Boolean.toString(query.getRunning())).build();
         }
         return url;
+    }
+
+    private String getExceptionMessage(Response response){
+        return "Unexpected code " + response + " for " + response.request();
     }
 }
 
