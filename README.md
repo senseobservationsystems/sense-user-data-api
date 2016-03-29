@@ -32,7 +32,7 @@ These are the most obvious use case of the API. For more detailed description of
 ### SenseUserDataAPI
 ```java
 	 // Get ready!
-	boolean useLive = false; // specifying if you want to use live server or stagint server 
+	boolean useLive = false; // Specifying whether you want to use live server or stagint server 
     SenseUserDataAPI userDataAPI = new SenseUserDataAPI(useLive);
     userDataAPI.setSessionId(sessionId);
     
@@ -66,7 +66,7 @@ These are the most obvious use case of the API. For more detailed description of
 ### SenseStatisticsAPI
 ```java
 	 // Get ready!
-	boolean useLive = false; // specifying if you want to use live server or stagint server
+	boolean useLive = false; // Specifying whether you want to use live server or stagint server
     SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
     statisticsAPI.setSessionId(sessionId);
     
