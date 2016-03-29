@@ -27,6 +27,7 @@ If you are not developing this module, you don't have to import this.
  
 
 ## Recipe
+These are the most obvious use case of the API. For more detailed description of each class/method, please refer to the inline documentation of each method.
 
 ### SenseUserDataAPI
 ```java
@@ -35,8 +36,18 @@ If you are not developing this module, you don't have to import this.
     SenseUserDataAPI userDataAPI = new SenseUserDataAPI(useLive);
     userDataAPI.setSessionId(sessionId);
     
-    // prepare JSONObject contains the user data for this user
-    // There is no format checking in this module or in the backend, so you can add any thing you like.
+    // prepare JSONObject contains the user data for this user.
+    // There is no format checking under "user_data" in this module or in the backend, so you can add any thing you like.
+    // For now, we are creating a json object structured as:
+    /** 
+    	{
+    		"user_data": {
+    			"first_name": "Frank",
+    			"last_name": "Underwood",
+     			"address": "1609 Far St. NW, Washington, D.C., 20036"
+    		}
+    	 }
+    **/ 
     JSONObject innerUserData = new JSONObject();
     innerUserData.put("first_name", "Frank");
     innerUserData.put("last_name", "Underwood");
@@ -45,13 +56,12 @@ If you are not developing this module, you don't have to import this.
     JSONObject outerUserData = new JSONObject();
     outerUserData.put("user_data", innerUserData);
 
-	 // Insert/Update the user data
+	 // Sending PUT request with the user data
     userDataAPI.putUserData(userId, outerUserData);
     
     // Get user data for this user
     JSONObject userData = userDataAPI.getUsersData(userId);
 ```
-
 
 ### SenseStatisticsAPI
 ```java
@@ -61,9 +71,11 @@ If you are not developing this module, you don't have to import this.
     statisticsAPI.setSessionId(sessionId);
     
     //prepare query
+    long now = System.currentTimeMillis() ;
+    long queryStartTime = now - 24 * 60 * 60 * 1000; // 24 hours ago
     SenseStatisticsQuery query = new SenseStatisticsQuery()
-            .setStartTime(0l)
-            .setEndTime(System.currentTimeMillis())
+            .setStartTime(queryStartTime)
+            .setEndTime(now)
             .setLimit(100);
 
     // get available Ids in user context
