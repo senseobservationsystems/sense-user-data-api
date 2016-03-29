@@ -14,15 +14,29 @@
  - Get a list of active statistics type eg) registered_user, active_user, time_active, sleep_time
  - Get statistics   
 
+## Dependencies
+sense-user-data-api makes use of third party libraries. You can import them using gradle.
+
+
+- [square/okhttp](https://github.com/square/okhttp)
+
+####For Testing
+If you are not developing this module, you don't have to import this.
+
+- [skyscreamer/JSONassert](https://github.com/skyscreamer/JSONassert)
+ 
+
 ## Recipe
 
 ### SenseUserDataAPI
 ```java
 	 // Get ready!
+	boolean useLive = false; // specifying if you want to use live server or stagint server 
     SenseUserDataAPI userDataAPI = new SenseUserDataAPI(useLive);
     userDataAPI.setSessionId(sessionId);
     
     // prepare JSONObject contains the user data for this user
+    // There is no format checking in this module or in the backend, so you can add any thing you like.
     JSONObject innerUserData = new JSONObject();
     innerUserData.put("first_name", "Frank");
     innerUserData.put("last_name", "Underwood");
@@ -42,6 +56,7 @@
 ### SenseStatisticsAPI
 ```java
 	 // Get ready!
+	boolean useLive = false; // specifying if you want to use live server or stagint server
     SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
     statisticsAPI.setSessionId(sessionId);
     
