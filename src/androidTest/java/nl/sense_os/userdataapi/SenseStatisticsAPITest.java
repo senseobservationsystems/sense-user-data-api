@@ -136,11 +136,11 @@ public class SenseStatisticsAPITest {
             // Act: get statistics
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
             JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
-            JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0));
+            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), "time_active");
 
-            // Assert: TODO: assert properly
-            Log.d(TAG, statistics.toString());
-            //JSONAssert.assertEquals(expectedArray, arrayOfStatisticsType, false);
+            // Assert:
+            Log.d(TAG, statisticsArray.toString());
+            Assert.assertTrue(statisticsArray.length() > 0);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,17 +166,17 @@ public class SenseStatisticsAPITest {
             //prepare query
             SenseStatisticsQuery query = new SenseStatisticsQuery()
                     .setStartTime(0l)
-                    .setEndTime(System.currentTimeMillis())
+                    .setEndTime(System.currentTimeMillis() - 7 * 24 * 60 * 60 * 1000)
                     .setLimit(100);
 
             // Act: get statistics
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
             JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
-            JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0), query);
+            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), "time_active", query);
 
-            // Assert: TODO: assert properly
-            Log.d(TAG, statistics.toString());
-            //JSONAssert.assertEquals(expectedArray, arrayOfStatisticsType, false);
+            // Assert:
+            Log.d(TAG, statisticsArray.toString());
+            Assert.assertTrue(statisticsArray.length() > 0);
 
         } catch (IOException e) {
             e.printStackTrace();
