@@ -33,7 +33,7 @@ public class SenseUserDataAPITest {
     @After
     public void tearDown() throws Exception {
         Log.v(TAG, "Tearing Down SenseUserDataAPITest");
-        //clearUsersData();
+        clearUsersData();
     }
 
     @Test
@@ -52,34 +52,6 @@ public class SenseUserDataAPITest {
 
             // Assert: the user_data to be empty
             JSONAssert.assertEquals(new JSONObject(), userData.getJSONObject("user_data"), false);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Assert.fail();
-        } catch (SenseResponseException e) {
-            e.printStackTrace();
-            Assert.fail();
-        }
-    }
-
-    @Test
-    public void testGetUsersDataAsDomainManager() {
-        Log.d(TAG, "testGetUsersData started!");
-        CSUtils csUtils = new CSUtils(useLive);
-        try {
-            // Arrange: login as domain manager
-            String sessionId = csUtils.loginUser("tatsuya+userdata@sense-os.nl", "Test1234");
-            SenseUserDataAPI userDataAPI = new SenseUserDataAPI(useLive);
-            userDataAPI.setSessionId(sessionId);
-
-            // Act: call GET for multiple users as domain manager
-            JSONArray usersData = userDataAPI.getUsersData();
-
-            // Assert: check if usersData contains more than 1
-            Assert.assertTrue(usersData.length() > 0);
 
         } catch (IOException e) {
             e.printStackTrace();
