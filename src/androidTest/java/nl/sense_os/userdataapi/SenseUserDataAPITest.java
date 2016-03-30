@@ -23,7 +23,7 @@ public class SenseUserDataAPITest {
 
     public static final String  TAG = "UserDataAPIUnitTest";
 
-    public static final boolean  useLive = false;
+    public static final boolean  useLive = true;
 
     @Before
     public void setup() {
@@ -33,7 +33,7 @@ public class SenseUserDataAPITest {
     @After
     public void tearDown() throws Exception {
         Log.v(TAG, "Tearing Down SenseUserDataAPITest");
-        clearUsersData();
+        //clearUsersData();
     }
 
     @Test

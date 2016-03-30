@@ -70,7 +70,7 @@ public class SenseStatisticsAPI {
      */
     public JSONArray getContext() throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
                 .build();
@@ -99,7 +99,7 @@ public class SenseStatisticsAPI {
      */
     public JSONArray getContextIds(String context) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
                 .addPathSegment(context)
@@ -131,7 +131,7 @@ public class SenseStatisticsAPI {
      */
     public JSONArray getActiveStatisticsType(String context, int contextId) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
                 .addPathSegment(context)
@@ -199,7 +199,7 @@ public class SenseStatisticsAPI {
      */
     public JSONArray getStatistics(String context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
                 .addPathSegment(context)

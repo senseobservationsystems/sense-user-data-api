@@ -99,7 +99,7 @@ public class SenseUserDataAPI {
      */
     public JSONArray getUsersData(JSONArray userIds) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_USERDATA)
                 .build();
@@ -147,7 +147,7 @@ public class SenseUserDataAPI {
      */
     public JSONObject getUserData(int userId, JSONArray query) throws SenseResponseException, IOException, JSONException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_USERDATA)
                 .addPathSegment(Integer.toString(userId))
@@ -177,7 +177,7 @@ public class SenseUserDataAPI {
      */
     public void putUserData(int userId, JSONObject userData) throws SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_USERDATA)
                 .addPathSegment(Integer.toString(userId))
@@ -204,7 +204,7 @@ public class SenseUserDataAPI {
      */
     public void deleteUserData(int userId) throws SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
-                .scheme(SCHEME_STAGING)
+                .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_USERDATA)
                 .addPathSegment(Integer.toString(userId))

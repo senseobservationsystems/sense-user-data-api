@@ -23,7 +23,7 @@ public class SenseStatisticsAPITest {
 
     public static final String  TAG = "StatisticsAPIUnitTest";
 
-    public static final boolean  useLive = false;
+    public static final boolean  useLive = true;
 
     @Before
     public void setup() {
