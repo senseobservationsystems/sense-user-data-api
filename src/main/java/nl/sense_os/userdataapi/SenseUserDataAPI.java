@@ -170,12 +170,13 @@ public class SenseUserDataAPI {
      * Put `UserData` of a user specified by the userId.
      *
      * @param userId int for the user ID of the user whose data should be updated.
-     * @param userData JSONArray containing userData, structured as:
-     *                    { first_name: string, last_name: string }
+     * @param userData JSONObject containing userData, structured as:
+     *                    { "first_name": <string>, "last_name": <string>, "whatever_you_like": <json_supported_datatype>}
      * @exception SenseResponseException
+     * @exception JSONException
      * @exception IOException
      */
-    public void putUserData(int userId, JSONObject userData) throws SenseResponseException, IOException {
+    public void putUserData(int userId, JSONObject userData) throws JSONException, SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
@@ -183,10 +184,14 @@ public class SenseUserDataAPI {
                 .addPathSegment(Integer.toString(userId))
                 .build();
 
+        // Add outer structure for userData
+        JSONObject outerUserData = new JSONObject();
+        outerUserData.put("user_data", userData);
+
         // Construct request
         Request request = new Request.Builder()
                 .url(url)
-                .put(RequestBody.create(JSON, userData.toString()))
+                .put(RequestBody.create(JSON, outerUserData.toString()))
                 .addHeader("SESSION-ID", mSessionId)
                 .build();
 

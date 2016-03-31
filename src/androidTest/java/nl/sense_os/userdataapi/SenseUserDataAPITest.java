@@ -23,7 +23,7 @@ public class SenseUserDataAPITest {
 
     public static final String  TAG = "UserDataAPIUnitTest";
 
-    public static final boolean  useLive = true;
+    public static final boolean  useLive = false;
 
     @Before
     public void setup() {
@@ -33,7 +33,7 @@ public class SenseUserDataAPITest {
     @After
     public void tearDown() throws Exception {
         Log.v(TAG, "Tearing Down SenseUserDataAPITest");
-        //clearUsersData();
+        clearUsersData();
     }
 
     @Test
@@ -77,19 +77,16 @@ public class SenseUserDataAPITest {
             userDataAPI.setSessionId(sessionId);
 
             //Act: update the user data for this user
-            JSONObject innerUserData = new JSONObject();
-            innerUserData.put("first_name", "Tatsuya");
-            innerUserData.put("last_name", "Underwood");
-            innerUserData.put("address", "Address of Tatsuya 111");
+            JSONObject userData = new JSONObject();
+            userData.put("first_name", "Tatsuya");
+            userData.put("last_name", "Underwood");
+            userData.put("address", "Address of Tatsuya 111");
 
-            JSONObject outerUserData = new JSONObject();
-            outerUserData.put("user_data", innerUserData);
-
-            userDataAPI.putUserData(userId, outerUserData);
+            userDataAPI.putUserData(userId, userData);
 
             //Assert: check the data is updated
-            JSONObject userData = userDataAPI.getUserData(userId);
-            JSONAssert.assertEquals(userData.getJSONObject("user_data"), innerUserData, false);
+            JSONObject retrievedUserData = userDataAPI.getUserData(userId);
+            JSONAssert.assertEquals(userData, retrievedUserData.getJSONObject("user_data"), false);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,29 +110,27 @@ public class SenseUserDataAPITest {
             SenseUserDataAPI userDataAPI = new SenseUserDataAPI(useLive);
             userDataAPI.setSessionId(sessionId);
             // prepare template
-            JSONObject innerUserData = new JSONObject();
-            innerUserData.put("first_name", "Frank");
-            innerUserData.put("last_name", "Underwood");
-            innerUserData.put("address", "1609 Far St. NW, Washington, D.C., 20036");
+            JSONObject userData = new JSONObject();
+            userData.put("first_name", "Frank");
+            userData.put("last_name", "Underwood");
+            userData.put("address", "1609 Far St. NW, Washington, D.C., 20036");
 
             //Act: update the user data for multiple users under this domain manager
             JSONArray retrievedUsersData = userDataAPI.getUsersData();
             for (int i = 0; i < retrievedUsersData.length(); i++) {
-                JSONObject userData = retrievedUsersData.getJSONObject(i);
+                JSONObject retrievedUserData = retrievedUsersData.getJSONObject(i);
 
-
-                JSONObject outerUserData = new JSONObject();
-                outerUserData.put("user_data", innerUserData);
-
-                userDataAPI.putUserData(userData.getInt("user_id"), outerUserData);
+                userDataAPI.putUserData(retrievedUserData.getInt("user_id"), userData);
             }
 
             //Assert: UserData is updated
             JSONArray updatedUsersData = userDataAPI.getUsersData();
             Log.d(TAG, String.format("%s", retrievedUsersData.toString()));
             for (int i = 0; i < updatedUsersData.length(); i++) {
-                JSONObject userData = updatedUsersData.getJSONObject(i);
-                JSONAssert.assertEquals(innerUserData, userData.getJSONObject("user_data"), false);
+                JSONObject updatedUserData = updatedUsersData.getJSONObject(i);
+                Log.d(TAG, String.format("retrievedUserData: %s", updatedUserData.toString()) );
+                Log.d(TAG, String.format("userData: %s", userData.toString()) );
+                JSONAssert.assertEquals(userData, updatedUserData.getJSONObject("user_data"), false);
             }
 
         } catch (IOException e) {
@@ -192,7 +187,7 @@ public class SenseUserDataAPITest {
         try {
             sessionId = csUtils.loginUser("tatsuya+userdata@sense-os.nl", "Test1234");
 
-            SenseUserDataAPI userDataAPI = new SenseUserDataAPI(false);
+            SenseUserDataAPI userDataAPI = new SenseUserDataAPI(useLive);
             userDataAPI.setSessionId(sessionId);
             JSONArray usersData = userDataAPI.getUsersData();
             Log.d(TAG, String.format("%s", usersData.toString()));

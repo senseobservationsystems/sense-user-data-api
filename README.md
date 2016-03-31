@@ -41,23 +41,18 @@ These are the most obvious use case of the API. For more detailed description of
     // For now, we are creating a json object structured as:
     /** 
     	{
-    		"user_data": {
-    			"first_name": "Frank",
-    			"last_name": "Underwood",
-     			"address": "1609 Far St. NW, Washington, D.C., 20036"
-    		}
-    	 }
+			"first_name": "Frank",
+			"last_name": "Underwood",
+ 			"address": "1609 Far St. NW, Washington, D.C., 20036"
+    	}
     **/ 
     JSONObject innerUserData = new JSONObject();
-    innerUserData.put("first_name", "Frank");
-    innerUserData.put("last_name", "Underwood");
-    innerUserData.put("address", "1609 Far St. NW, Washington, D.C., 20036");
-
-    JSONObject outerUserData = new JSONObject();
-    outerUserData.put("user_data", innerUserData);
+    userData.put("first_name", "Frank");
+    userData.put("last_name", "Underwood");
+    userData.put("address", "1609 Far St. NW, Washington, D.C., 20036");
 
 	 // Sending PUT request with the user data
-    userDataAPI.putUserData(userId, outerUserData);
+    userDataAPI.putUserData(userId, userData);
     
     // Get user data for this user
     JSONObject userData = userDataAPI.getUsersData(userId);
