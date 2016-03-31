@@ -33,7 +33,7 @@ public class SenseUserDataAPITest {
     @After
     public void tearDown() throws Exception {
         Log.v(TAG, "Tearing Down SenseUserDataAPITest");
-        clearUsersData();
+        //clearUsersData();
     }
 
     @Test
@@ -119,7 +119,6 @@ public class SenseUserDataAPITest {
             JSONArray retrievedUsersData = userDataAPI.getUsersData();
             for (int i = 0; i < retrievedUsersData.length(); i++) {
                 JSONObject retrievedUserData = retrievedUsersData.getJSONObject(i);
-
                 userDataAPI.putUserData(retrievedUserData.getInt("user_id"), userData);
             }
 

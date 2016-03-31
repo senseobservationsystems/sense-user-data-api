@@ -176,7 +176,7 @@ public class SenseUserDataAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public void putUserData(int userId, JSONObject userData) throws JSONException, SenseResponseException, IOException {
+    public boolean putUserData(int userId, JSONObject userData) throws JSONException, SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
@@ -198,6 +198,8 @@ public class SenseUserDataAPI {
         // Send Request
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
+
+        return true;
     }
 
     /**
@@ -207,7 +209,7 @@ public class SenseUserDataAPI {
      * @exception SenseResponseException
      * @exception IOException
      */
-    public void deleteUserData(int userId) throws SenseResponseException, IOException {
+    public boolean deleteUserData(int userId) throws SenseResponseException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
@@ -225,6 +227,7 @@ public class SenseUserDataAPI {
         // Send Request
         Response response = client.newCall(request).execute();
         if (!response.isSuccessful()) throw new SenseResponseException(getExceptionMessage(response));
+        return true;
     }
 
     private String getExceptionMessage(Response response){
