@@ -82,3 +82,276 @@ These are the most obvious use case of the API. For more detailed description of
     // get statistics
     JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0), query);
 ```
+
+## Update User Data
+
+putUserData will update user data or create a new one if there is no data for such user yet. Update will only overwrite particular field in the existing user data. If the new field value is null, then the field will be removed from the user data.
+
+| Parameter | Description        | Type   | Example                                                                                                          |
+|-----------|--------------------|--------|------------------------------------------------------------------------------------------------------------------|
+| user_id   | the id of user     | int    | 1                                                                                                                |
+| new_data  | the new user data  | object | {"first name": "Bob"} <br> {"place of birth": "Bandung", "date of birth": "Apr 1 1980"} <br> {"last name": null} |
+
+The update is not returning any data.
+
+#### Example
+
+##### Example 1 - Update non-exists user data
+
+<table>
+  <tbody>
+    <tr>
+      <td> Initial Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td> Input Parameter </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <td> user_id </td>
+              <td> 2 </td>
+            </tr>
+            <tr>
+              <td> new_data </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>      
+      </td>
+    </tr>
+    <tr>
+      <td> Final Data </td>
+      <td>
+        <table>
+          <tbody>
+v            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley"} </td>
+            </tr>
+            <tr>
+              <td> <b>2</b> </td>
+              <td> <b>{"first name": "Charlie", "last_name": "Sheen"}</b> </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+      
+##### Example 2 - Update exists user data with non-exists field
+
+<table>
+  <tbody>
+    <tr>
+      <td> Initial Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley"} </td>
+            </tr>
+            <tr>
+              <td> 2 </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td> Input Parameter </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <td> user_id </td>
+              <td> 1 </td>
+            </tr>
+            <tr>
+              <td> new_data </td>
+              <td> {"date of birth": "Apr 1 1980"} </td>
+            </tr>
+          </tbody>
+        </table>      
+      </td>
+    </tr>
+    <tr>
+      <td> Final Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley", <b>"date of birth": "Apr 1 1980"</b>} </td>
+            </tr>
+            <tr>
+              <td> 2 </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+##### Example 3 - Update exists user data with exists field
+
+<table>
+  <tbody>
+    <tr>
+      <td> Initial Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley", "date of birth": "Apr 1 1980"} </td>
+            </tr>
+            <tr>
+              <td> 2 </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td> Input Parameter </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <td> user_id </td>
+              <td> 1 </td>
+            </tr>
+            <tr>
+              <td> new_data </td>
+              <td> {"date of birth": "Feb 29 1970"} </td>
+            </tr>
+          </tbody>
+        </table>      
+      </td>
+    </tr>
+    <tr>
+      <td> Final Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley", <b>"date of birth": "Feb 29 1970"</b>} </td>
+            </tr>
+            <tr>
+              <td> 2 </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+##### Example 4 - Update will new value of null (delete data)
+
+<table>
+  <tbody>
+    <tr>
+      <td> Initial Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley", "date of birth": "Feb 29 1970"} </td>
+            </tr>
+            <tr>
+              <td> 2 </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td> Input Parameter </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <td> user_id </td>
+              <td> 1 </td>
+            </tr>
+            <tr>
+              <td> new_data </td>
+              <td> {"date of birth": null} </td>
+            </tr>
+          </tbody>
+        </table>      
+      </td>
+    </tr>
+    <tr>
+      <td> Final Data </td>
+      <td>
+        <table>
+          <tbody>
+            <tr>
+              <th> user_id </th>
+              <th> user_data </th>
+            </tr>
+            <tr>
+              <td> 1 </td>
+              <td> {"first name": "Bob", "last_name": "Marley"} </td>
+            </tr>
+            <tr>
+              <td> 2 </td>
+              <td> {"first name": "Charlie", "last_name": "Sheen"} </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
