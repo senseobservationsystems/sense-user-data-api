@@ -50,9 +50,9 @@ public class SenseStatisticsAPITest {
 
             // Assert: check that the arrayOfContext contains domain, group and user
             JSONArray expectedArray = new JSONArray();
-            expectedArray.put(SenseStatisticsContext.DOMAIN);
-            expectedArray.put(SenseStatisticsContext.GROUP);
-            expectedArray.put(SenseStatisticsContext.USER);
+            expectedArray.put(SenseStatisticsContext.DOMAIN.toString());
+            expectedArray.put(SenseStatisticsContext.GROUP.toString());
+            expectedArray.put(SenseStatisticsContext.USER.toString());
             JSONAssert.assertEquals(expectedArray, arrayOfContext, false);
 
         } catch (IOException e) {
@@ -94,7 +94,7 @@ public class SenseStatisticsAPITest {
     }
 
     @Test
-    public void testGetActiveStatisticsType() {
+    public void testGetAvailableMeasurementType() {
         Log.d(TAG, "testGetActiveStatisticsType started!");
         CSUtils csUtils = new CSUtils(useLive);
         try {
@@ -105,11 +105,11 @@ public class SenseStatisticsAPITest {
 
             // Act: get an array of context IDs
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-            JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
+            JSONArray arrayOfMeasurementType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
 
             // Assert: available statisticsType should be more than 0 for this user
-            Log.d(TAG, "Available statisticsType:" + arrayOfStatisticsType.toString());
-            Assert.assertTrue(arrayOfStatisticsType.length() > 0);
+            Log.d(TAG, "Available measurementType:" + arrayOfMeasurementType.toString());
+            Assert.assertTrue(arrayOfMeasurementType.length() > 0);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class SenseStatisticsAPITest {
 
             // Act: get statistics
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-            JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
+            JSONArray arrayOfStatisticsType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
             JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), "time_active");
 
             // Assert:
@@ -171,8 +171,12 @@ public class SenseStatisticsAPITest {
 
             // Act: get statistics
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-            JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
-            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), "time_active", query);
+            JSONArray arrayOfMeasurementType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER,
+                    arrayOfContextIds.getInt(0));
+            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
+                                                                arrayOfContextIds.getInt(0),
+                                                                "time_active",
+                                                                query);
 
             // Assert:
             Log.d(TAG, statisticsArray.toString());

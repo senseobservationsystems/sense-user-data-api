@@ -49,24 +49,6 @@ public class SenseStatisticsQuery {
         return this;
     }
 
-    public String getPeriod() {
-        return period;
-    }
-
-    public SenseStatisticsQuery setPeriod(String period) {
-        this.period = period;
-        return this;
-    }
-
-    public String getAggregation() {
-        return aggregation;
-    }
-
-    public SenseStatisticsQuery setAggregation(String aggregation) {
-        this.aggregation = aggregation;
-        return this;
-    }
-
     public Boolean getRunning() {
         return running;
     }

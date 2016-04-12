@@ -3,10 +3,22 @@ package nl.sense_os.userdataapi;
 /**
  * Created by tatsuya on 22/03/16.
  */
-public class SenseStatisticsContext {
-    public static final String DOMAIN = "domain";
-    public static final String GROUP = "group";
-    public static final String USER = "user";
+public enum SenseStatisticsContext {
+    DOMAIN {
+        public String toString() {
+            return "domain";
+        }
+    },
 
-    private SenseStatisticsContext() { }
+    GROUP {
+        public String toString() {
+            return "group";
+        }
+    },
+
+    USER {
+        public String toString() {
+            return "user";
+        }
+    }
 }

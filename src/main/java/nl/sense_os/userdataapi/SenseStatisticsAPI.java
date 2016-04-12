@@ -97,12 +97,12 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getContextIds(String context) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getContextIds(SenseStatisticsContext context) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
-                .addPathSegment(context)
+                .addPathSegment(context.toString())
                 .build();
 
         // Construct request
@@ -121,7 +121,7 @@ public class SenseStatisticsAPI {
 
     /**
      * Get list of currently active statistics_type for this contextId.
-     * @param context JSONArray for `context`. The value can be "user", "group" and "domain".
+     * @param context SenseStatisticsContext. The value can be "user", "group" and "domain".
      * @param contextId integer for the context ID.
      * @return JSONArray containing String for available `statistics_type`.
      *          The value can be "registered_user", "active_user", "time_active", "sleep_time" and "etc".
@@ -129,12 +129,12 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getActiveStatisticsType(String context, int contextId) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getAvailableMeasurementType(SenseStatisticsContext context, int contextId) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
-                .addPathSegment(context)
+                .addPathSegment(context.toString())
                 .addPathSegment(Integer.toString(contextId))
                 .build();
 
@@ -154,7 +154,7 @@ public class SenseStatisticsAPI {
 
     /**
      * Get statistics result of the given statistics type.
-     * @param context JSONArray for `context`. The value can be "user", "group" and "domain".
+     * @param context SenseStatisticsContext. for `context`. The value can be "user", "group" and "domain".
      * @param contextId int for the context ID.
      * @param statisticsType String for statisticsType that should be returned.
      * @return JSONArray structured as:
@@ -172,13 +172,13 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getStatistics(String context, int contextId, String statisticsType) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getStatistics(SenseStatisticsContext context, int contextId, String statisticsType) throws SenseResponseException, JSONException, IOException {
        return getStatistics(context, contextId, statisticsType, null);
     }
 
     /**
      * Get statistics result of the given statistics type.
-     * @param context JSONArray for `context`. The value can be "user", "group" and "domain".
+     * @param context SenseStatisticsContext. The value can be "user", "group" and "domain".
      * @param contextId int for the context ID.
      * @param statisticsType String for statisticsType that should be returned.
      * @param query SenseStatisticsQuery for specifying desired condition for the query.
@@ -197,12 +197,12 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getStatistics(String context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getStatistics(SenseStatisticsContext context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
-                .addPathSegment(context)
+                .addPathSegment(context.toString())
                 .addPathSegment(Integer.toString(contextId))
                 .addPathSegment(statisticsType)
                 .build();
@@ -237,12 +237,6 @@ public class SenseStatisticsAPI {
         }
         if (query.getLimit() != null) {
             url.newBuilder().addQueryParameter("limit", Integer.toString(query.getLimit())).build();
-        }
-        if (query.getPeriod() != null) {
-            url.newBuilder().addQueryParameter("period", query.getPeriod()).build();
-        }
-        if (query.getAggregation() != null) {
-            url.newBuilder().addQueryParameter("aggregation", query.getAggregation()).build();
         }
         if (query.getRunning() != null) {
             url.newBuilder().addQueryParameter("aggregation", Boolean.toString(query.getRunning())).build();
