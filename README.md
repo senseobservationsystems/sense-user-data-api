@@ -11,8 +11,17 @@
  - Delete a user's data as a domain manager (No bulk delete)
 
 ### SenseStatisticsAPI
- - Get a list of active statistics type eg) registered_user, active_user, time_active, sleep_time
- - Get statistics   
+StatisticsAPI allows you to obtain the following statistical data.
+
+###### For a user 
+- **Sum/Average/Distribution** of running distance of a user during **day/week/month**
+- **Sum/Average/Distribution** of running duration of a user during **day/week/month**
+- **Average/Distribution** of average speed of a user during **day/week/month**
+
+###### For group/domain 
+- **Sum/Average/Distribution** of total running distance in the group/domain during **day/week/month**
+- **Sum/Average/Distribution** of total running duration in the group/domain during **day/week/month**
+- **Average/Distribution** of average speed in the group/domain during **day/week/month**  
 
 ## Dependencies
 sense-user-data-api makes use of third party libraries. You can import them using gradle.
@@ -59,31 +68,71 @@ These are the most obvious use case of the API. For more detailed description of
 ```
 
 ### SenseStatisticsAPI
+For a starter, let's get the distributions of total running duration of week in the domain 1234. 
+
 ```java
 	 // Get ready!
 	boolean useLive = false; // Specifying whether you want to use live server or stagint server
     SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
     statisticsAPI.setSessionId(sessionId);
     
+    // get the distribution of running distance within the damain with id 1234.
+    int contextId = 1234
+    String measurement = "distance"
+    JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.DOMAIN,
+    											 	contextId,
+    											 	AggregationType.DISTRIBUTION,
+    											 	Period.WEEK,
+    											 	measurement,
+    											 	);
+```
+`getStatistics(....)` method has the following composary parameters:
+
+##### Context:
+*Context* allows you to specify the desired scope from which you want to obtain the statistics. Use enum `SenseStatisticsContext`. 
+
+##### ContextID:
+*ContextId* allows you to specify which individual *context* that you want to obtain the statistics from. Possible entries can be obtained by ```getContextIds(...)```.
+
+##### Aggregation:
+*Aggregation* allows you to specify the desired type of the aggregation that should be performed.
+Use enum `AggreagationType`
+
+##### Period: 
+*Period* allows you to specify the desired interval over which the aggregation of data should be performed. Use enum `Period`.
+
+##### Measurement:
+*Measurement* allows you to specify the type of measurement for which teh aggregation of data should be performed. The available measurement can be obtained by ```getAvailableMeasurementType(...)```.
+
+#### More About Statistics API
+
+There are a number of available convinient functions to get the parameters dynamically. In actual use cases, you can use `StatisticsAPI` as follows:
+
+```java
+	 // Get ready to get the average running speed per week of this user over the last 10 weeks!
+	boolean useLive = false; 
+    SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
+    statisticsAPI.setSessionId(sessionId);
+    
     //prepare query
-    long now = System.currentTimeMillis() ;
-    long queryStartTime = now - 24 * 60 * 60 * 1000; // 24 hours ago
-    SenseStatisticsQuery query = new SenseStatisticsQuery()
-            .setStartTime(queryStartTime)
-            .setEndTime(now)
-            .setLimit(100);
+    SenseStatisticsQuery query = new SenseStatisticsQuery().setLimit(10);
 
     // get available Ids in user context
     JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
     
     // get available statistics type
-    JSONArray arrayOfStatisticsType = statisticsAPI.getActiveStatisticsType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
+    JSONArray arrayOfMeasurementTypes = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
     
     // get statistics
-    JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), arrayOfStatisticsType.getString(0), query);
+    JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
+    											 	arrayOfContextIds.getInt(0), 
+    											 	AggregationType.AVERAGE,
+    											 	Period.WEEK
+    											 	arrayOfMeasurementTypes.getString(0), //let's assume the first element is "speed"
+    											  	query);
 ```
 
-## Update User Data
+## Updating User Data
 
 putUserData will update user data or create a new one if there is no data for such user yet. Update will only overwrite particular field in the existing user data. If the new field value is null, then the field will be removed from the user data.
 

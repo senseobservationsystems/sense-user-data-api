@@ -52,7 +52,7 @@ Use enum `AggreagationType`
 *Measurement* allows you to specify the type of measurement for which teh aggregation of data should be performed. The available measurement can be obtained by ```getAvailableMeasurementType(...)```.
 
 
-#### More Examples
+#### More About Statistics API
 
 There are a number of available convinient functions to get the parameters dynamically. In actual use cases, you can use `StatisticsAPI` as follows:
 
