@@ -14,14 +14,14 @@
 StatisticsAPI allows you to obtain the following statistical data.
 
 ###### For a user 
-- **Sum/Average/Distribution** of running distance of a user during **day/week/month**
-- **Sum/Average/Distribution** of running duration of a user during **day/week/month**
-- **Average/Distribution** of average speed of a user during **day/week/month**
+- **Sum/Average** of distance of a user during **week/month**
+- **Sum/Average** of duration of a user during **week/month**
+- **Average** of average speed of a user during **week/month**
 
 ###### For group/domain 
-- **Sum/Average/Distribution** of total running distance in the group/domain during **day/week/month**
-- **Sum/Average/Distribution** of total running duration in the group/domain during **day/week/month**
-- **Average/Distribution** of average speed in the group/domain during **day/week/month**  
+- **Average/Distribution** of total distance in the group/domain during **week/month**
+- **Average/Distribution** of total duration in the group/domain during **week/month**
+- **Average/Distribution** of average speed in the group/domain during **week/month**  
 
 ## Dependencies
 sense-user-data-api makes use of third party libraries. You can import them using gradle.
@@ -68,7 +68,7 @@ These are the most obvious use case of the API. For more detailed description of
 ```
 
 ### SenseStatisticsAPI
-For a starter, let's get the distributions of total running duration of week in the domain 1234. 
+For a starter, let's get the distributions of total duration of week in the domain 1234. 
 
 ```java
 	 // Get ready!
@@ -78,12 +78,12 @@ For a starter, let's get the distributions of total running duration of week in 
     
     // get the distribution of running distance within the damain with id 1234.
     int contextId = 1234
-    String measurement = "distance"
+    String measurement = "totalDistance"
     JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.DOMAIN,
     											 	contextId,
     											 	AggregationType.DISTRIBUTION,
     											 	Period.WEEK,
-    											 	measurement,
+    											 	measurement
     											 	);
 ```
 `getStatistics(....)` method has the following composary parameters:
@@ -128,7 +128,7 @@ There are a number of available convinient functions to get the parameters dynam
     											 	arrayOfContextIds.getInt(0), 
     											 	AggregationType.AVERAGE,
     											 	Period.WEEK
-    											 	arrayOfMeasurementTypes.getString(0), //let's assume the first element is "speed"
+    											 	arrayOfMeasurementTypes.getString(0), //let's assume the first element is "averageSpeed"
     											  	query);
 ```
 

@@ -21,6 +21,7 @@ import okhttp3.Response;
 public class CSUtils {
 
     public static final String APP_KEY = "wRgE7HZvhDsRKaRm6YwC3ESpIqqtakeg";
+    public static final String APP_KEY_LIVE = "s1iS3CDK7Xb9rRjeJD5LM1XS67dP7pkl";
     public static final String  TAG = "CSUtils";
 
     private static String URL_BASE;				  //The base url to use, will differ based on whether to use live or staging server
@@ -102,7 +103,7 @@ public class CSUtils {
         Request request = new Request.Builder()
                 .url(url)
                 .post(RequestBody.create(JSON, postBody.toString()))
-                .addHeader("APPLICATION-KEY", APP_KEY)
+                .addHeader("APPLICATION-KEY", APP_KEY_LIVE)
                 .build();
 
         // Send Request
@@ -146,7 +147,7 @@ public class CSUtils {
         Request request = new Request.Builder()
                 .url(url)
                 .delete()
-                .addHeader("APPLICATION-KEY", APP_KEY)
+                .addHeader("APPLICATION-KEY", APP_KEY_LIVE)
                 .build();
 
         // Send Request

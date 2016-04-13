@@ -21,14 +21,29 @@ import java.io.IOException;
 @SmallTest
 public class SenseStatisticsAPITest {
 
-    public static final String  TAG = "StatisticsAPIUnitTest";
+    public static final String TAG = "StatisticsAPIUnitTest";
 
-    public static final boolean  useLive = true;
+    public static final boolean useLive = true;
+
+    public static final String usernameLive = "ricky+brightr-asml@sense-os.nl";
+    public static final String usernameStaging = "";
+
+    public static final String passwordLive = "12341234";
+    public static final String passwordStaging = "";
+
+    public static String username;
+    public static String password;
 
     @Before
     public void setup() {
-        Log.v(TAG, "Setup SenseStatisticsAPIUnitTest");
+        username = usernameStaging;
+        password = passwordStaging;
+        if (useLive) {
+            username = usernameLive;
+            password = passwordLive;
+        }
     }
+
 
     @After
     public void tearDown() throws Exception {
@@ -41,7 +56,7 @@ public class SenseStatisticsAPITest {
         CSUtils csUtils = new CSUtils(useLive);
         try {
             // Arrange: login as domain manager
-            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            String sessionId = csUtils.loginUser(username, password);
             SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
             statisticsAPI.setSessionId(sessionId);
 
@@ -70,7 +85,7 @@ public class SenseStatisticsAPITest {
         CSUtils csUtils = new CSUtils(useLive);
         try {
             // Arrange: login as a user and get the user id
-            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            String sessionId = csUtils.loginUser(username, password);
             SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
             statisticsAPI.setSessionId(sessionId);
 
@@ -99,7 +114,7 @@ public class SenseStatisticsAPITest {
         CSUtils csUtils = new CSUtils(useLive);
         try {
             // Arrange: login as a user and get the user id
-            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            String sessionId = csUtils.loginUser(username, password);
             SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
             statisticsAPI.setSessionId(sessionId);
 
@@ -129,18 +144,18 @@ public class SenseStatisticsAPITest {
         CSUtils csUtils = new CSUtils(useLive);
         try {
             // Arrange: login as a user and get the user id
-            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            String sessionId = csUtils.loginUser(username, password);
             SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
             statisticsAPI.setSessionId(sessionId);
 
             // Act: get statistics
-            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-            JSONArray arrayOfStatisticsType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER,
+            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.DOMAIN);
+            JSONArray arrayOfStatisticsType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.DOMAIN,
                                                                                         arrayOfContextIds.getInt(0));
-            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
+            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.DOMAIN,
                                                                     arrayOfContextIds.getInt(0),
-                                                                    AggregationType.DISTRIBUTION,
-                                                                    Period.WEEK,
+                                                                    AggregationType.AVERAGE,
+                                                                    Period.DAY,
                                                                     "time_active");
 
             // Assert:
@@ -165,7 +180,7 @@ public class SenseStatisticsAPITest {
         CSUtils csUtils = new CSUtils(useLive);
         try {
             // Arrange: login as a user and get the user id
-            String sessionId = csUtils.loginUser("tatsuya+jetlag@sense-os.nl@brightr-generic", "Test1234");
+            String sessionId = csUtils.loginUser(username, password);
             SenseStatisticsAPI statisticsAPI = new SenseStatisticsAPI(useLive);
             statisticsAPI.setSessionId(sessionId);
             //prepare query
@@ -175,13 +190,13 @@ public class SenseStatisticsAPITest {
                     .setLimit(100);
 
             // Act: get statistics
-            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-            JSONArray arrayOfMeasurementType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER,
+            JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.DOMAIN);
+            JSONArray arrayOfMeasurementType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.DOMAIN,
                     arrayOfContextIds.getInt(0));
-            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
+            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.DOMAIN,
                                                                 arrayOfContextIds.getInt(0),
-                                                                AggregationType.DISTRIBUTION,
-                                                                Period.WEEK,
+                                                                AggregationType.AVERAGE,
+                                                                Period.DAY,
                                                                 "time_active",
                                                                 query);
 

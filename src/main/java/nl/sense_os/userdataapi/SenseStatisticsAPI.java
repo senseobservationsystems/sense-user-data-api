@@ -1,5 +1,7 @@
 package nl.sense_os.userdataapi;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -236,6 +238,8 @@ public class SenseStatisticsAPI {
                 .url(url)
                 .addHeader("SESSION-ID", mSessionId)
                 .build();
+
+        Log.v(TAG, "####" +             request.toString());
 
         // Send Request
         Response response = client.newCall(request).execute();
