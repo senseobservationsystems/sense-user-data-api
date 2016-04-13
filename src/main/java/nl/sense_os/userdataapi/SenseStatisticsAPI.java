@@ -68,7 +68,8 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getContext() throws SenseResponseException, JSONException, IOException {
+    public JSONArray getContext()
+            throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
@@ -97,7 +98,8 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getContextIds(SenseStatisticsContext context) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getContextIds(SenseStatisticsContext context)
+            throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
@@ -123,13 +125,14 @@ public class SenseStatisticsAPI {
      * Get list of currently active statistics_type for this contextId.
      * @param context SenseStatisticsContext. The value can be "user", "group" and "domain".
      * @param contextId integer for the context ID.
-     * @return JSONArray containing String for available `statistics_type`.
-     *          The value can be "registered_user", "active_user", "time_active", "sleep_time" and "etc".
+     * @return JSONArray containing String for available `measurement_type`.
      * @exception SenseResponseException
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getAvailableMeasurementType(SenseStatisticsContext context, int contextId) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getAvailableMeasurementType(SenseStatisticsContext context,
+                                                 int contextId)
+            throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
@@ -156,7 +159,9 @@ public class SenseStatisticsAPI {
      * Get statistics result of the given statistics type.
      * @param context SenseStatisticsContext. for `context`. The value can be "user", "group" and "domain".
      * @param contextId int for the context ID.
-     * @param statisticsType String for statisticsType that should be returned.
+     * @param aggregationType enum to specify the desired type of the aggregation that should be performed.
+     * @param period enum to specify the desired interval over which the aggregation of data should be performed.
+     * @param measurementType String to to specify the type of measurement for which teh aggregation of data should be performed. The available measurement can be obtained by getAvailableMeasurementType(...).
      * @return JSONArray structured as:
      *              [
      *                  {
@@ -172,15 +177,22 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getStatistics(SenseStatisticsContext context, int contextId, String statisticsType) throws SenseResponseException, JSONException, IOException {
-       return getStatistics(context, contextId, statisticsType, null);
+    public JSONArray getStatistics(SenseStatisticsContext context,
+                                   int contextId,
+                                   AggregationType aggregationType,
+                                   Period period,
+                                   String measurementType)
+            throws SenseResponseException, JSONException, IOException {
+       return getStatistics(context, contextId, aggregationType, period, measurementType, null);
     }
 
     /**
      * Get statistics result of the given statistics type.
      * @param context SenseStatisticsContext. The value can be "user", "group" and "domain".
      * @param contextId int for the context ID.
-     * @param statisticsType String for statisticsType that should be returned.
+     * @param aggregationType enum to specify the desired type of the aggregation that should be performed.
+     * @param period enum to specify the desired interval over which the aggregation of data should be performed.
+     * @param measurementType String for statisticsType that should be returned.
      * @param query SenseStatisticsQuery for specifying desired condition for the query.
      * @return JSONArray structured as:
      *              [
@@ -197,14 +209,22 @@ public class SenseStatisticsAPI {
      * @exception JSONException
      * @exception IOException
      */
-    public JSONArray getStatistics(SenseStatisticsContext context, int contextId, String statisticsType, SenseStatisticsQuery query) throws SenseResponseException, JSONException, IOException {
+    public JSONArray getStatistics(SenseStatisticsContext context,
+                                   int contextId,
+                                   AggregationType aggregationType,
+                                   Period period,
+                                   String measurementType,
+                                   SenseStatisticsQuery query)
+            throws SenseResponseException, JSONException, IOException {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme(SCHEME_BASE)
                 .host(URL_BASE)
                 .addPathSegment(URL_STATS)
                 .addPathSegment(context.toString())
                 .addPathSegment(Integer.toString(contextId))
-                .addPathSegment(statisticsType)
+                .addPathSegment(measurementType)
+                .addQueryParameter("aggregation", aggregationType.toString())
+                .addQueryParameter("period", period.toString())
                 .build();
 
         if (query != null){
@@ -239,7 +259,7 @@ public class SenseStatisticsAPI {
             url.newBuilder().addQueryParameter("limit", Integer.toString(query.getLimit())).build();
         }
         if (query.getRunning() != null) {
-            url.newBuilder().addQueryParameter("aggregation", Boolean.toString(query.getRunning())).build();
+            url.newBuilder().addQueryParameter("running", Boolean.toString(query.getRunning())).build();
         }
         return url;
     }

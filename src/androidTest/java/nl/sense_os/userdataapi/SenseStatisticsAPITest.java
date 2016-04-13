@@ -135,8 +135,13 @@ public class SenseStatisticsAPITest {
 
             // Act: get statistics
             JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
-            JSONArray arrayOfStatisticsType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
-            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0), "time_active");
+            JSONArray arrayOfStatisticsType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER,
+                                                                                        arrayOfContextIds.getInt(0));
+            JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
+                                                                    arrayOfContextIds.getInt(0),
+                                                                    AggregationType.DISTRIBUTION,
+                                                                    Period.WEEK,
+                                                                    "time_active");
 
             // Assert:
             Log.d(TAG, statisticsArray.toString());
@@ -175,6 +180,8 @@ public class SenseStatisticsAPITest {
                     arrayOfContextIds.getInt(0));
             JSONArray statisticsArray = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
                                                                 arrayOfContextIds.getInt(0),
+                                                                AggregationType.DISTRIBUTION,
+                                                                Period.WEEK,
                                                                 "time_active",
                                                                 query);
 

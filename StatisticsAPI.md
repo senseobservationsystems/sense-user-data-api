@@ -36,18 +36,17 @@ For a starter, let's get the distributions of total running duration of week in 
 `getStatistics(....)` method has the following composary parameters:
 
 ##### Context:
-*Context* allows you to specify the desired scope from which you want to obtain the statistics. Possible entries are **user**, **group** and **domain**. 
+*Context* allows you to specify the desired scope from which you want to obtain the statistics. Use enum `SenseStatisticsContext`. 
 
 ##### ContextID:
 *ContextId* allows you to specify which individual *context* that you want to obtain the statistics from. Possible entries can be obtained by ```getContextIds(...)```.
 
 ##### Aggregation:
 *Aggregation* allows you to specify the desired type of the aggregation that should be performed.
-Possible entries are **sum**, **distribution** and **average**.
+Use enum `AggreagationType`
 
 ##### Period: 
-*Period* allows you to specify the desired interval over which the aggregation of data should be performed.
-Possible entries are **day**, **week**, **month**.
+*Period* allows you to specify the desired interval over which the aggregation of data should be performed. Use enum `Period`.
 
 ##### Measurement:
 *Measurement* allows you to specify the type of measurement for which teh aggregation of data should be performed. The available measurement can be obtained by ```getAvailableMeasurementType(...)```.
@@ -70,13 +69,13 @@ There are a number of available convinient functions to get the parameters dynam
     JSONArray arrayOfContextIds = statisticsAPI.getContextIds(SenseStatisticsContext.USER);
     
     // get available statistics type
-    JSONArray arrayOfMeasurementType = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
+    JSONArray arrayOfMeasurementTypes = statisticsAPI.getAvailableMeasurementType(SenseStatisticsContext.USER, arrayOfContextIds.getInt(0));
     
     // get statistics
     JSONArray statistics = statisticsAPI.getStatistics(SenseStatisticsContext.USER,
     											 	arrayOfContextIds.getInt(0), 
-    											 	SenseStatisticsAggregationType.AVERAGE,
-    											 	SenseStatisticsPeriod.WEEK
-    											 	arrayOfStatisticsType.getString(0), //let's assume the first element is "speed"
+    											 	AggregationType.AVERAGE,
+    											 	Period.WEEK
+    											 	arrayOfMeasurementTypes.getString(0), //let's assume the first element is "speed"
     											  	query);
 ```
