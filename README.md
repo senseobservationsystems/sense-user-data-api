@@ -17,11 +17,13 @@ StatisticsAPI allows you to obtain the following statistical data.
 - **Sum/Average** of distance of a user during **week/month**
 - **Sum/Average** of duration of a user during **week/month**
 - **Average** of average speed of a user during **week/month**
+- **Sum** of number of days where a user ran during **week/month**
 
 ###### For group/domain 
 - **Average/Distribution** of total distance in the group/domain during **week/month**
 - **Average/Distribution** of total duration in the group/domain during **week/month**
-- **Average/Distribution** of average speed in the group/domain during **week/month**  
+- **Average/Distribution** of average speed in the group/domain during **week/month**
+- **Average/Distribution** of number of days where users in the group/domain ran during **week/month**  
 
 ## Dependencies
 sense-user-data-api makes use of third party libraries. You can import them using gradle.
